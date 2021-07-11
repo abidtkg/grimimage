@@ -2,9 +2,10 @@ const express = require('express');
 const app = express();
 const sharp = require('sharp');
 
-app.get('/convert', async (req, res) => {
+app.get('/convert/:size', async (req, res) => {
+    const size = +req.params.size;
     try{
-        await sharp('images/grim.jpg').resize(600).png().toBuffer((err, data, info) => {
+        await sharp('images/grim.jpg').resize(size).png().toBuffer((err, data, info) => {
             if(err) return res.status(500).json({error: err});
             res.status(200).set({'Content-Type': 'image/png', 'Content-Length': data.length}).send(data);
         });
