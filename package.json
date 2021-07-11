@@ -1,0 +1,26 @@
+{
+  "name": "grimimage",
+  "version": "1.0.0",
+  "description": "'GRIMIMAGE' is a serious image scaling server side software.",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abidtkg/grimimage.git"
+  },
+  "author": "Abid Hasan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/abidtkg/grimimage/issues"
+  },
+  "homepage": "https://github.com/abidtkg/grimimage#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "sharp": "^0.28.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}
