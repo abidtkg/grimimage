@@ -2,6 +2,15 @@ const express = require('express');
 const app = express();
 const sharp = require('sharp');
 
+// IMPORT ROUTES
+const authRoutes = require('./routes/auth.routes');
+const userRoutes = require('./routes/user.routes');
+
+// USE IMPORTED ROUTES
+app.get('/', (req, res) => res.json({message: 'API Server Running'}));
+app.use('/auth', authRoutes);
+app.use('/user', userRoutes);
+
 app.get('/convert/:size', async (req, res) => {
     const size = +req.params.size;
     try{
