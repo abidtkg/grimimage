@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 const sharp = require('sharp');
+const mongoose = require('mongoose');
+require('dotenv').config();
 
 // IMPORT ROUTES
 const authRoutes = require('./routes/auth.routes');
@@ -23,6 +25,17 @@ app.get('/convert/:size', async (req, res) => {
         console.log(error);
     }
 });
+
+// DATABASE CONNECTION
+mongoose.connect(process.env.DB, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+});
+mongoose.connection
+  .once('open', () => console.log('MongoDB Connected'))
+  .on('error', (error) => {
+    console.log('Error', error);
+  });
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Server Running: http://localhost:${port}`));
