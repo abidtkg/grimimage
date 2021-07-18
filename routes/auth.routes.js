@@ -30,8 +30,25 @@ router.post('/create', async (req, res) => {
     }catch(error){
         console.log(error)
         return res.status(500).json({message: '500 Internal Server Error', error: error});
-        
     }
+});
+
+
+router.post('/login', async (req, res) => {
+    let user;
+    try{
+        user = await User.findOne({email: req.body.email});
+    }catch(error){
+        return res.status(500).json({message: '500 Internal Server Error', error: error});
+    }
+
+    if(!user) return res.status(400).json({message: 'User not found'});
+
+    const verifyPassword = await bcrypt.compare(req.body.password, user.password);
+    if(!verifyPassword) return res.status(400).json({message: "Error Password"});
+
+    token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET);
+    res.status(200).header('token', token).json({token: token, name: user.name, email: user.email});
 });
 
 module.exports = router;
