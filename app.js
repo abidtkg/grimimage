@@ -4,6 +4,9 @@ const sharp = require('sharp');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
+// JSON ONLY DEFINED
+app.use(express.json());
+
 // IMPORT ROUTES
 const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');

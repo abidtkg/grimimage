@@ -13,6 +13,10 @@ const UserSchema = new Schema({
     password: {
         type: String,
         required: false
+    },
+    date: {
+        type: Date,
+        default: Date.now()
     }
 });
 
