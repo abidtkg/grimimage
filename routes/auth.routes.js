@@ -5,14 +5,48 @@ const bcrypt = require('bcrypt');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 
+
+/**
+* @swagger
+*   /auth/create:
+*   post:
+*       description: Create new user account
+*       summary: 
+*       tags:
+*           - Authentication
+*       responses:
+*           '200':
+*               description: JWT Token & User Object
+*               schema:
+*                 type: object
+*                 properties:
+*                   token:
+*                       type: string
+*                   name:
+*                       type: string
+*                   message:
+*                       type: string
+*       parameters:
+*         - in: body
+*           name: auth info
+*           schema:
+*              type: object
+*              properties:
+*                  name:
+*                      type: string
+*                  email:
+*                      type: string
+*                  password:
+*                      type: string
+*/
 router.post('/create', async (req, res) => {
     let userExist;
     try{
         userExist = await User.findOne({email: req.body.email});
     }catch(error){
-        return res.status(500).json({message: '500 Internal Server Error', error: error});
+        return res.status(500).json({error: '500 Internal Server Error'});
     }
-    if(userExist) return res.status(400).json({message: 'The Email Already Exist'});
+    if(userExist) return res.status(400).json({error: 'The Email Already Exist'});
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
@@ -34,6 +68,46 @@ router.post('/create', async (req, res) => {
 });
 
 
+/**
+* @swagger
+*   /auth/login:
+*   post:
+*       description: Authorize Account
+*       summary: 
+*       tags:
+*           - Authentication
+*       responses:
+*           '200':
+*               description: JWT auth token
+*               schema:
+*                 type: object
+*                 properties:
+*                   token:
+*                       type: string
+*                   isAdmin:
+*                       type: string
+*                   name:
+*                       type: string
+*           '500':
+*               description: Server Error
+*               schema:
+*                 type: object
+*                 properties:
+*                   error:
+*                       type: string
+*       parameters:
+*         - in: body
+*           name: auth info
+*           schema:
+*              type: object
+*              properties:
+*                  phone:
+*                      type: string
+*                      required: true
+*                  password:
+*                      type: string
+*                      required: true
+*/
 router.post('/login', async (req, res) => {
     let user;
     try{

@@ -3,6 +3,8 @@ const app = express();
 const sharp = require('sharp');
 const mongoose = require('mongoose');
 require('dotenv').config();
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocs = require('./configs/swagger.config');
 
 // JSON ONLY DEFINED
 app.use(express.json());
@@ -13,6 +15,8 @@ const userRoutes = require('./routes/user.routes');
 
 // USE IMPORTED ROUTES
 app.get('/', (req, res) => res.json({message: 'API Server Running'}));
+app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 
@@ -34,6 +38,7 @@ mongoose.connect(process.env.DB, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
+
 mongoose.connection
   .once('open', () => console.log('MongoDB Connected'))
   .on('error', (error) => {
